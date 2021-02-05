@@ -1,20 +1,16 @@
----
-layout: resume
----
-## Currently
+## 👩🏼‍🎓 Education
 
-Current Position Description
+**Master of Science in Embedded Systems** focused on Deep Learning and Natural Language Processing<br>
+[Saarland University](https://www.uni-saarland.de/en/home.html/) - Saarbrücken, Germany _(Oct 2019 - Present)_ <br>
 
-## Education
+**Bachelor of Engineering in Electronics and Communication Engineering** <br>
+[Sri Jayachamarajendra College of Engineering](https://sjce.ac.in/) - Mysuru, India _(Aug 2014 - May 2018)_<br>
 
-`1990 - 1994`
-__University Name__
-Degree Awarded
+**Washington Semester Program** for Journalism and New Media<br>
+[American University](https://www.american.edu/) - Washington DC, USA _(Fall 2014)_
 
-`1995 - 1997`
-__University Name__
-Degree Awarded 
-
+**International Exchange** studying Political Science<br>
+[Yeditepe Üniversitesi](https://yeditepe.edu.tr/en) - Istanbul, Turkey _(Spring 2013)_
 ## Awards
 
 `2012`
