@@ -1,5 +1,8 @@
-# Resume
-## 👩🏼‍🎓 Education<br>
+---
+title: "Resume"
+---
+
+## 👩🏼‍🎓 Education
 
 **Master of Science in Embedded Systems** focused on Deep Learning and Natural Language Processing<br>
 [Saarland University](https://www.uni-saarland.de/en/home.html/) - Saarbrücken, Germany _(Oct 2019 - Present)_ <br>
