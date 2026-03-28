@@ -8,11 +8,11 @@ logo: # filename of a logo image that has been placed into your images directory
 owner:
   name: Aishwarya Anegundi
   avatar: pro-pic.jpg
-  bio: "Masters student at Saarland University, Germany"
+  bio: "AI/ML Engineer &amp; NLP Researcher | ThoughtWorks alum | MPI Informatics | Saarland University"
   email: s8aianeg@uni-saarland.de
   # Do not include the @ symbol in your Twitter username
   twitter: #username
-  linkedin: www.linkedin.com/in/aishwarya-anegundi
+  linkedin: aishwarya-anegundi
   github: https://github.com/aishwaryaanegundi
   orcid: # ID Number (ex. 0000-0000-0000-0000)
   researchgate: #username

@@ -1,50 +1,503 @@
-<!doctype html>
-<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
-<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!DOCTYPE html>
+<html lang="en">
 <head>
-{% include _cvhead.html %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume &mdash; {{ site.title }}</title>
+  <meta name="description" content="Resume of {{ site.owner.name }} — AI/ML Engineer and NLP Researcher.">
+  <link rel="shortcut icon" href="{{ site.github.url }}/favicon.ico">
+  {% seo %}
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
+  <style>
+    :root {
+      --bg:      #05080f;
+      --bg-2:    #0b1120;
+      --bg-3:    #111b2e;
+      --surface: #162035;
+      --border:  #1e2d47;
+      --primary: #4f8ef7;
+      --accent:  #a78bfa;
+      --green:   #34d399;
+      --text:    #dde5f0;
+      --sub:     #8fa8c8;
+      --dim:     #4a6280;
+      --font:    'Inter', system-ui, sans-serif;
+      --mono:    'JetBrains Mono', monospace;
+      --r:       10px;
+      --ease:    cubic-bezier(0.4,0,0.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { color: var(--accent); }
+    strong { color: var(--text); }
+
+    /* ---- NAVBAR ---- */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 2rem;
+      background: rgba(5,8,15,0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .navbar-brand {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.03em;
+    }
+    .navbar-brand span { color: var(--primary); }
+    .navbar-back {
+      font-size: 0.82rem;
+      color: var(--sub);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s var(--ease);
+    }
+    .navbar-back:hover { color: var(--primary); }
+
+    /* ---- LAYOUT ---- */
+    .page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+
+    .resume-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .rh-name {
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+    .rh-title {
+      font-size: 1rem;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .rh-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .rh-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      color: var(--sub);
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      transition: all 0.2s var(--ease);
+    }
+    .rh-link:hover { border-color: var(--primary); color: var(--primary); }
+
+    .rh-print {
+      flex-shrink: 0;
+    }
+    .btn-print {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--sub);
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      font-family: var(--font);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+    }
+    .btn-print:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* ---- SECTIONS ---- */
+    .r-section { margin-bottom: 3rem; }
+
+    .r-section-title {
+      font-size: 0.7rem;
+      font-family: var(--mono);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--primary);
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.75rem;
+    }
+
+    /* ---- TIMELINE ITEMS ---- */
+    .r-item { margin-bottom: 2rem; }
+    .r-item:last-child { margin-bottom: 0; }
+
+    .r-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.2rem;
+    }
+
+    .r-role { font-size: 1rem; font-weight: 700; color: var(--text); }
+    .r-period {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--primary);
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .r-org { font-size: 0.88rem; color: var(--accent); font-weight: 500; margin-bottom: 0.6rem; }
+    .r-org a { color: var(--accent); }
+    .r-org a:hover { color: var(--primary); }
+    .r-org-sub { font-size: 0.8rem; color: var(--dim); margin-bottom: 0.6rem; }
+    .r-desc { font-size: 0.88rem; color: var(--sub); line-height: 1.75; margin-bottom: 0.7rem; }
+
+    .r-bullets {
+      list-style: none;
+      margin: 0.5rem 0;
+    }
+    .r-bullets li {
+      font-size: 0.88rem;
+      color: var(--sub);
+      line-height: 1.7;
+      padding-left: 1.2rem;
+      position: relative;
+      margin-bottom: 0.3rem;
+    }
+    .r-bullets li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.65rem; }
+    .tag {
+      font-size: 0.68rem;
+      font-family: var(--mono);
+      padding: 0.18rem 0.55rem;
+      border-radius: 5px;
+      background: rgba(79,142,247,0.07);
+      color: var(--primary);
+      border: 1px solid rgba(79,142,247,0.15);
+    }
+    .tag.v { background: rgba(167,139,250,0.07); color: var(--accent); border-color: rgba(167,139,250,0.15); }
+    .tag.g { background: rgba(52,211,153,0.07); color: var(--green); border-color: rgba(52,211,153,0.15); }
+
+    /* ---- CONTENT from markdown ---- */
+    .resume-content h2 {
+      font-size: 0.7rem;
+      font-family: var(--mono);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--primary);
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.75rem;
+      margin-top: 3rem;
+    }
+    .resume-content h2:first-child { margin-top: 0; }
+
+    .resume-content p,
+    .resume-content li {
+      font-size: 0.88rem;
+      color: var(--sub);
+      line-height: 1.75;
+    }
+
+    .resume-content strong { color: var(--text); }
+    .resume-content em { color: var(--dim); }
+    .resume-content a { color: var(--primary); }
+    .resume-content a:hover { color: var(--accent); }
+
+    .resume-content ul {
+      list-style: none;
+      margin: 0.5rem 0 1rem;
+    }
+    .resume-content ul li {
+      padding-left: 1.2rem;
+      position: relative;
+      margin-bottom: 0.3rem;
+    }
+    .resume-content ul li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .resume-content code {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      background: rgba(79,142,247,0.07);
+      color: var(--primary);
+      padding: 0.12rem 0.45rem;
+      border-radius: 4px;
+      border: 1px solid rgba(79,142,247,0.15);
+    }
+
+    /* ---- FOOTER ---- */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      text-align: center;
+    }
+    .site-footer p { font-size: 0.78rem; color: var(--dim); }
+    .site-footer a { color: var(--sub); }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 640px) {
+      .page-wrap { padding: 2rem 1.25rem 4rem; }
+      .resume-header { flex-direction: column; }
+      .r-item-header { flex-direction: column; gap: 0.25rem; }
+    }
+
+    /* ---- PRINT ---- */
+    @media print {
+      body { background: #fff; color: #111; }
+      .navbar, .btn-print, .site-footer { display: none; }
+      .page-wrap { padding: 0; max-width: none; }
+      .r-section-title { color: #333; border-color: #ccc; }
+      .r-period { color: #555; }
+      .r-role { color: #000; }
+      .r-org { color: #444; }
+      .r-desc, .r-bullets li, .resume-content p, .resume-content li { color: #333; }
+      .tag { background: #f0f0f0; color: #444; border-color: #ccc; }
+      .rh-name { color: #000; }
+      .rh-title { color: #333; }
+      .resume-content h2 { color: #333; border-color: #ccc; }
+    }
+  </style>
 </head>
 
-<body class="page">
+<body>
 
-{% include _browser-upgrade.html %}
+<nav class="navbar">
+  <a href="{{ site.github.url }}/" class="navbar-brand">Aishwarya <span>Anegundi</span></a>
+  <a href="{{ site.github.url }}/" class="navbar-back">
+    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    Back to Portfolio
+  </a>
+</nav>
 
-{% include _navigation.html %}
+<div class="page-wrap">
 
-
-
-<div id="main" role="main">
-  <div class="article-author-side">
-    {% include _author-bio.html %}
+  <!-- Resume Header -->
+  <div class="resume-header">
+    <div>
+      <div class="rh-name">{{ site.owner.name }}</div>
+      <div class="rh-title">AI/ML Engineer &amp; NLP Researcher</div>
+      <div class="rh-links">
+        {% if site.owner.email %}
+        <a href="mailto:{{ site.owner.email }}" class="rh-link">✉ {{ site.owner.email }}</a>
+        {% endif %}
+        {% if site.owner.linkedin %}
+        <a href="https://linkedin.com/in/{{ site.owner.linkedin }}" target="_blank" rel="noopener" class="rh-link">💼 LinkedIn</a>
+        {% endif %}
+        <a href="{{ site.owner.github }}" target="_blank" rel="noopener" class="rh-link">🐙 GitHub</a>
+      </div>
+    </div>
+    <div class="rh-print">
+      <button class="btn-print" onclick="window.print()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+        Print / PDF
+      </button>
+    </div>
   </div>
-  <article class="page">
-    <h1>{{ page.title }}</h1>
 
-   <div class="resume">
-      {{ content }}
-</div><!--closing resume div-->
-    <!--  {% if page.share != false %}
-        <hr />
-  
-      {% endif %}-->
+  <!-- Experience -->
+  <div class="r-section">
+    <div class="r-section-title">Experience</div>
 
-   <!-- {% if site.owner.disqus-shortname and page.comments == true %}
-      <section id="disqus_thread"></section><!-- /#disqus_thread -->
-  {% endif %}
-  </article>
-</div><!-- /#index -->
+    <div class="r-item">
+      <div class="r-item-header">
+        <div class="r-role">Student Research Assistant</div>
+        <div class="r-period">Oct 2020 &ndash; Present</div>
+      </div>
+      <div class="r-org"><a href="https://www.mpi-inf.mpg.de/home" target="_blank" rel="noopener">Max Planck Institute of Informatics</a></div>
+      <div class="r-org-sub">Saarbrücken, Germany</div>
+      <ul class="r-bullets">
+        <li>Researching NLP techniques for Social Media Analysis within the Computational Social Science domain.</li>
+        <li>Developing and evaluating models for discourse analysis, stance detection, and information diffusion across large-scale social platforms.</li>
+        <li>Exploring neural language understanding approaches on noisy, real-world text corpora.</li>
+      </ul>
+      <div class="tags">
+        <span class="tag">NLP</span>
+        <span class="tag v">Social Media Analysis</span>
+        <span class="tag v">Computational Social Science</span>
+        <span class="tag">Deep Learning</span>
+        <span class="tag">Python</span>
+        <span class="tag">PyTorch</span>
+      </div>
+    </div>
 
-<div class="footer-wrap">
-  <footer>
-  <!--  {% include _footer.html %}-->
-  </footer>
-</div><!-- /.footer-wrap -->
+    <div class="r-item">
+      <div class="r-item-header">
+        <div class="r-role">Application Developer</div>
+        <div class="r-period">Jul 2018 &ndash; Sep 2019</div>
+      </div>
+      <div class="r-org"><a href="https://www.thoughtworks.com" target="_blank" rel="noopener">ThoughtWorks</a></div>
+      <div class="r-org-sub">India</div>
+      <ul class="r-bullets">
+        <li>Delivered production software using Agile methodologies, TDD, pair programming, and continuous integration.</li>
+        <li>Built and maintained features for a biometric data platform — gaining early exposure to data pipelines and ML applications.</li>
+        <li>Developed strong foundations in clean code principles and collaborative software craftsmanship.</li>
+      </ul>
+      <div class="tags">
+        <span class="tag g">Java</span>
+        <span class="tag g">Agile / TDD</span>
+        <span class="tag g">CI/CD</span>
+        <span class="tag g">Clean Code</span>
+        <span class="tag">Biometric Data</span>
+      </div>
+    </div>
+  </div>
 
-{% include _scripts.html %}
+  <!-- Education -->
+  <div class="r-section">
+    <div class="r-section-title">Education</div>
+
+    <div class="r-item">
+      <div class="r-item-header">
+        <div class="r-role">Master of Science — Embedded Systems</div>
+        <div class="r-period">Oct 2019 &ndash; Present</div>
+      </div>
+      <div class="r-org"><a href="https://www.uni-saarland.de/en/home.html" target="_blank" rel="noopener">Saarland University</a></div>
+      <div class="r-org-sub">Saarbrücken, Germany</div>
+      <div class="r-desc">Specialisation in Deep Learning and Natural Language Processing.</div>
+      <div class="tags">
+        <span class="tag">Deep Learning</span>
+        <span class="tag v">NLP</span>
+        <span class="tag">Computer Vision</span>
+        <span class="tag v">Transformers</span>
+      </div>
+    </div>
+
+    <div class="r-item">
+      <div class="r-item-header">
+        <div class="r-role">Bachelor of Engineering — Electronics &amp; Communication</div>
+        <div class="r-period">Aug 2014 &ndash; May 2018</div>
+      </div>
+      <div class="r-org"><a href="https://sjce.ac.in/" target="_blank" rel="noopener">Sri Jayachamarajendra College of Engineering</a></div>
+      <div class="r-org-sub">Mysuru, India</div>
+      <div class="tags">
+        <span class="tag g">Electronics</span>
+        <span class="tag g">Signal Processing</span>
+        <span class="tag g">Embedded Systems</span>
+        <span class="tag g">C / C++</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skills -->
+  <div class="r-section">
+    <div class="r-section-title">Skills</div>
+
+    <div class="r-item">
+      <div class="r-role" style="font-size:0.85rem;margin-bottom:0.45rem">Machine Learning &amp; Deep Learning</div>
+      <div class="tags">
+        <span class="tag">PyTorch</span>
+        <span class="tag">TensorFlow</span>
+        <span class="tag">Keras</span>
+        <span class="tag">scikit-learn</span>
+        <span class="tag">Transformers</span>
+        <span class="tag">CNNs</span>
+        <span class="tag">RNNs</span>
+        <span class="tag">LSTMs</span>
+      </div>
+    </div>
+
+    <div class="r-item">
+      <div class="r-role" style="font-size:0.85rem;margin-bottom:0.45rem">Natural Language Processing</div>
+      <div class="tags">
+        <span class="tag v">HuggingFace</span>
+        <span class="tag v">BERT / GPT</span>
+        <span class="tag v">spaCy</span>
+        <span class="tag v">NLTK</span>
+        <span class="tag v">Question Answering</span>
+        <span class="tag v">Text Classification</span>
+        <span class="tag v">NLU</span>
+      </div>
+    </div>
+
+    <div class="r-item">
+      <div class="r-role" style="font-size:0.85rem;margin-bottom:0.45rem">Programming &amp; Engineering</div>
+      <div class="tags">
+        <span class="tag g">Python</span>
+        <span class="tag g">Java</span>
+        <span class="tag g">C / C++</span>
+        <span class="tag g">Git</span>
+        <span class="tag g">TDD</span>
+        <span class="tag g">Agile</span>
+        <span class="tag g">CI/CD</span>
+        <span class="tag">NumPy</span>
+        <span class="tag">Pandas</span>
+        <span class="tag">OpenCV</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Research Interests -->
+  <div class="r-section">
+    <div class="r-section-title">Research Interests</div>
+    <div class="tags" style="margin-top:0">
+      <span class="tag v">Natural Language Understanding</span>
+      <span class="tag v">Neural Question Answering</span>
+      <span class="tag v">Computational Social Science</span>
+      <span class="tag">Social Media Analysis</span>
+      <span class="tag">Knowledge Graphs</span>
+      <span class="tag">Information Retrieval</span>
+    </div>
+  </div>
+
+  <!-- Extra content from resume.md if any -->
+  <div class="resume-content">
+    {{ content }}
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <p>&copy; {{ site.time | date: '%Y' }} {{ site.owner.name }} &nbsp;&middot;&nbsp; <a href="{{ site.github.url }}/">Back to Portfolio</a></p>
+</footer>
 
 </body>
 </html>
